@@ -1,0 +1,1231 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeamBuilder Pro - PE Management Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* NORMALIZE */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body,
+        h1,
+        h2,
+        h3,
+        h4,
+        p,
+        figure,
+        blockquote,
+        dl,
+        dd {
+            margin: 0;
+        }
+
+        ul,
+        ol {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        button {
+            background: none;
+            border: none;
+            padding: 0;
+            font: inherit;
+            cursor: pointer;
+            color: inherit;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        /* VARIABLES */
+        :root {
+            --primary-color: #1e3a8a;
+            --secondary-color: #ea580b;
+            --text-color: #374151;
+            --bg-color: #f9f9f9;
+            --white: #ffffff;
+            --font-family: 'Poppins', sans-serif;
+            --header-height: 60px;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --transition: all 0.3s ease-in-out;
+        }
+
+        /* GLOBAL STYLES */
+        body {
+            font-family: var(--font-family);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            overflow-x: hidden;
+            line-height: 1.6;
+            text-rendering: optimizeLegibility;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        h2 {
+            font-size: 2.2rem;
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--primary-color);
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        /* HEADER */
+        header {
+            background-color: var(--white);
+            padding: 10px 0;
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: var(--shadow);
+            top: 0;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        nav ul {
+            display: flex;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+            position: relative;
+            display: block;
+            padding: 8px 0;
+        }
+
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--secondary-color);
+            transition: width 0.3s ease;
+        }
+
+        nav ul li a:hover,
+        nav ul li a:focus {
+            color: var(--secondary-color);
+        }
+
+        nav ul li a:hover::after,
+        nav ul li a:focus::after {
+            width: 100%;
+        }
+
+        /* DASHBOARD */
+        .dashboard {
+            display: flex;
+            padding-top: var(--header-height);
+            min-height: calc(100vh - var(--header-height));
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: #f0f0f0;
+            padding: 20px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar ul li {
+            margin-bottom: 15px;
+        }
+
+        .sidebar ul li a {
+            display: block;
+            padding: 10px 15px;
+            background-color: var(--white);
+            color: var(--text-color);
+            border-radius: 5px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            font-weight: 500;
+        }
+
+        .sidebar ul li a:hover,
+        .sidebar ul li a:focus,
+        .sidebar ul li a.active {
+            background-color: var(--secondary-color);
+            color: var(--white);
+            transform: translateX(5px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 30px;
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="number"],
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: var(--font-family);
+            font-size: 1rem;
+            color: var(--text-color);
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input[type="text"]:focus,
+        .form-group input[type="number"]:focus,
+        .form-group select:focus {
+            border-color: var(--secondary-color);
+            outline: none;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: var(--font-family);
+            font-weight: 600;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+        }
+
+        button:hover,
+        button:focus {
+            background-color: #152d70;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 10px -2px rgba(0, 0, 0, 0.15);
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .data-table th {
+            background-color: #f5f5f5;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .data-table tbody tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .actions button {
+            padding: 8px 16px;
+            font-size: 0.9rem;
+            box-shadow: none;
+        }
+
+        .actions button.edit {
+            background-color: #3498db;
+        }
+
+        .actions button.delete {
+            background-color: #e74c3c;
+        }
+
+        /* Utilities */
+        .hidden {
+            display: none !important;
+        }
+
+        /* Make Teams */
+        #teamCount {
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #bdc3c7;
+            width: 80px;
+            text-align: center;
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        #teamCount:focus {
+            border-color: #3498db;
+            outline: none;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        #teams {
+            margin-top: 40px;
+        }
+
+        .team {
+            background-color: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.5s ease-out;
+            border-left: 5px solid #27ae60;
+        }
+
+        .team h3 {
+            margin-top: 0;
+            color: #2c3e50;
+            border-bottom: 2px solid #f39c12;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        .team ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .team ul li {
+            padding: 8px 12px;
+            margin-bottom: 5px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .team ul li:hover {
+            background-color: #f2f2f2;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .controls {
+                flex-direction: column;
+            }
+
+            .controls>* {
+                margin-bottom: 15px;
+            }
+
+            #teamCount {
+                width: 100%;
+            }
+        }
+
+        /* Improved Number Input Styles */
+        .number-input {
+            display: flex;
+            align-items: center;
+            border: 1px solid #bdc3c7;
+            border-radius: 5px;
+            overflow: hidden;
+            width: 120px;
+            margin-bottom: 15px;
+        }
+
+        .number-input button {
+            background-color: #ecf0f1;
+            color: #34495e;
+            border: none;
+            padding: 8px 10px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: normal;
+            box-shadow: none;
+            transition: background-color 0.3s ease;
+            line-height: 0;
+        }
+
+        .number-input button:hover {
+            background-color: #ddd;
+            transform: none;
+        }
+
+        .number-input input {
+            width: 40px;
+            text-align: center;
+            border: none;
+            padding: 10px;
+            font-size: 16px;
+            font-family: 'Poppins', sans-serif;
+            outline: none;
+        }
+
+        /* Style for Make Teams button */
+        #makeTeamsBtn {
+            background-color: #2ecc71;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            font-size: 16px;
+        }
+
+        #makeTeamsBtn:hover {
+            background-color: #27ae60;
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        /* New Styles */
+        #classSelect {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: var(--font-family);
+            font-size: 1rem;
+            color: var(--text-color);
+            transition: border-color 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        #classSelect:focus {
+            border-color: var(--secondary-color);
+            outline: none;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .student-rating {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .student-rating label {
+            width: 150px;
+            text-align: right;
+            margin-right: 15px;
+            font-weight: 600;
+        }
+
+        .slider-container {
+            flex: 1;
+            position: relative;
+            background: linear-gradient(to right, darkred, darkgreen);
+            border-radius: 5px;
+            height: 10px;
+            overflow: hidden; /* Prevent slider from overflowing */
+        }
+
+        .slider {
+            position: absolute;
+            top: -5px;
+            left: 0;
+            width: 20px;
+            height: 20px;
+            background-color: white;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            transition: left 0.1s ease; /* Smooth transition for movement */
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 10px;
+            -webkit-appearance: none;
+            background: transparent;
+            position: absolute;
+            top: 0;
+            left: 0;
+            margin: 0;
+            cursor: pointer;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 0; /* Hide the default thumb */
+            height: 0;
+        }
+
+        .student-list {
+            margin-top: 20px;
+        }
+
+        .student-list li {
+            padding: 10px;
+            margin-bottom: 5px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .student-list li span {
+            font-weight: 500;
+        }
+
+        /* Settings Styles */
+        #settings {
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .theme-selector {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+        }
+
+        .theme-selector label {
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .theme-options {
+            display: flex;
+            gap: 10px;
+        }
+
+        .theme-option {
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .theme-option:hover {
+            background-color: #f0f0f0;
+        }
+
+        .theme-option.selected {
+            border-color: var(--primary-color);
+            background-color: #e0e0e0;
+        }
+
+        /* Student Tag Styles */
+        .student-tags {
+            display: flex;
+            gap: 5px;
+            margin-top: 5px;
+            flex-wrap: wrap; /* Allow tags to wrap to the next line */
+        }
+
+        .student-tag {
+            padding: 5px 8px;
+            border-radius: 3px;
+            font-size: 0.8rem;
+            color: var(--white);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            border-radius: 10px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* Legendary Styles */
+        .legendary-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #222; /* Changed to black */
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        /* Improved Make Teams Styles */
+        #make-teams .controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        #make-teams .controls>* {
+            margin-right: 15px;
+        }
+
+        #make-teams #classFilter {
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            font-family: var(--font-family);
+            font-size: 1rem;
+            color: var(--text-color);
+        }
+
+        #make-teams .team-options {
+            display: flex;
+            flex-direction: column;
+        }
+
+        #make-teams .team-options label {
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav class="container">
+            <div class="logo">TeamBuilder Pro</div>
+            <ul>
+                <li><a href="#" data-target="classes">Classes</a></li>
+                <li><a href="#" data-target="students">Students</a></li>
+                <li><a href="#" data-target="make-teams">Make Teams</a></li>
+                <li><a href="#" data-target="settings">Settings</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="dashboard">
+        <div class="sidebar">
+            <ul>
+                <li><a href="#" data-target="classes"><i class="fas fa-chalkboard"></i> Classes</a></li>
+                <li><a href="#" data-target="students"><i class="fas fa-user-graduate"></i> Students</a></li>
+                <li><a href="#" data-target="make-teams"><i class="fas fa-users"></i> Make Teams</a></li>
+                <li><a href="#" data-target="settings"><i class="fas fa-cog"></i> Settings</a></li>
+            </ul>
+        </div>
+
+        <main class="main-content">
+            <section id="classes" class="dashboard-section">
+                <h2 class="legendary-title">Classes</h2>
+                <div id="classForm">
+                    <div class="form-group">
+                        <label for="className">Class Name:</label>
+                        <input type="text" id="className" name="className">
+                    </div>
+                    <button id="addClassBtn">Add Class</button>
+                </div>
+
+                <table class="data-table" id="classTable">
+                    <thead>
+                        <tr>
+                            <th>Class Name</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Class data will be dynamically added here -->
+                    </tbody>
+                </table>
+            </section>
+
+            <section id="students" class="dashboard-section hidden">
+                <h2 class="legendary-title">Students</h2>
+                <div id="studentForm">
+                    <div class="form-group">
+                        <label for="studentName">Student Name:</label>
+                        <input type="text" id="studentName" name="studentName">
+                    </div>
+                    <div class="form-group">
+                        <label for="classSelect">Class:</label>
+                        <select id="classSelect" name="classSelect">
+                            <!-- Class options will be dynamically added here -->
+                        </select>
+                    </div>
+                    <div class="student-rating">
+                        <label for="studentRating">Student Rating:</label>
+                        <div class="slider-container">
+                            <input type="range" id="studentRating" name="studentRating" min="1" max="100" value="50">
+                            <div class="slider"></div>
+                        </div>
+                    </div>
+                    <button id="addStudentBtn">Add Student</button>
+                </div>
+
+                <ul class="student-list" id="studentList">
+                    <!-- Student list will be dynamically added here -->
+                </ul>
+            </section>
+
+            <section id="make-teams" class="dashboard-section hidden">
+                <h2 class="legendary-title">Make Teams</h2>
+                <div class="controls">
+                    <div class="form-group">
+                        <label for="teamCount">Number of Teams:</label>
+                        <div class="number-input">
+                            <button onclick="decrementTeamCount()">-</button>
+                            <input type="number" id="teamCount" value="2" min="1">
+                            <button onclick="incrementTeamCount()">+</button>
+                        </div>
+                    </div>
+                    <button id="makeTeamsBtn">Make Teams</button>
+                </div>
+                <div id="teams">
+                    <!-- Teams will be dynamically added here -->
+                </div>
+                <div id="make-teams" class="dashboard-section hidden">
+                    <h2 class="legendary-title">Make Teams</h2>
+                    <div class="controls">
+                        <div class="form-group">
+                            <label for="classFilter">Select Class:</label>
+                            <select id="classFilter" name="classFilter">
+                                <!-- Class options will be dynamically added here -->
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="teamCount">Number of Teams:</label>
+                            <div class="number-input">
+                                <button onclick="decrementTeamCount()">-</button>
+                                <input type="number" id="teamCount" value="2" min="1">
+                                <button onclick="incrementTeamCount()">+</button>
+                            </div>
+                        </div>
+                        <div class="team-options">
+                            <label><input type="checkbox" id="balanceTeams" checked> Balance Teams by Rating</label>
+                        </div>
+                        <button id="makeTeamsBtn">Make Teams</button>
+                    </div>
+                    <div id="teams">
+                        <!-- Teams will be dynamically added here -->
+                    </div>
+                </div>
+            </section>
+
+            <section id="settings" class="dashboard-section hidden">
+                <h2 class="legendary-title">Settings</h2>
+                <div id="settings">
+                    <div class="theme-selector">
+                        <label>Select Theme:</label>
+                        <div class="theme-options">
+                            <div class="theme-option" data-theme="light">Light</div>
+                            <div class="theme-option selected" data-theme="dark">Dark</div>
+                            <div class="theme-option" data-theme="high-contrast">High Contrast</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="defaultClass">Default Class:</label>
+                        <select id="defaultClass" name="defaultClass">
+                            <!-- Class options will be dynamically added here -->
+                        </select>
+                    </div>
+                    <button id="saveSettingsBtn">Save Settings</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Edit Student Modal -->
+    <div id="editStudentModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Edit Student</h2>
+            <div class="form-group">
+                <label for="editStudentName">Student Name:</label>
+                <input type="text" id="editStudentName" name="editStudentName">
+            </div>
+            <div class="form-group">
+                <label for="editClassSelect">Class:</label>
+                <select id="editClassSelect" name="editClassSelect">
+                    <!-- Class options will be dynamically added here -->
+                </select>
+            </div>
+            <div class="student-rating">
+                <label for="editStudentRating">Student Rating:</label>
+                <div class="slider-container">
+                    <input type="range" id="editStudentRating" name="editStudentRating" min="1" max="100"
+                        value="50">
+                    <div class="slider"></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Tags:</label>
+                <div id="editStudentTags">
+                    <label><input type="checkbox" name="tag" value="recruited-athlete"> Recruited Athlete</label><br>
+                    <label><input type="checkbox" name="tag" value="has-iep">Has IEP</label><br>
+                    <label><input type="checkbox" name="tag" value="medical-condition">Medical Condition</label><br>
+                    <label><input type="checkbox" name="tag" value="limited-mobility">Limited Mobility</label><br>
+                    <label><input type="checkbox" name="tag" value="vision-impairment">Vision Impairment</label><br>
+                    <label><input type="checkbox" name="tag" value="hearing-impairment">Hearing Impairment</label><br>
+                    <label><input type="checkbox" name="tag" value="behavioral-challenges">Behavioral Challenges</label><br>
+                    <label><input type="checkbox" name="tag" value="gifted-athlete">Gifted Athlete</label><br>
+                    <label><input type="checkbox" name="tag" value="english-learner">English Learner</label><br>
+                    <label><input type="checkbox" name="tag" value="absenteeism-concerns">Absenteeism Concerns</label>
+                </div>
+            </div>
+            <button id="saveEditStudentBtn">Save Changes</button>
+        </div>
+    </div>
+
+    <script>
+        const dashboardSections = document.querySelectorAll('.dashboard-section');
+        const navLinks = document.querySelectorAll('header nav ul li a, .sidebar ul li a');
+        const addClassBtn = document.getElementById('addClassBtn');
+        const classNameInput = document.getElementById('className');
+        const classTableBody = document.getElementById('classTable').querySelector('tbody');
+        const classSelect = document.getElementById('classSelect');
+        const addStudentBtn = document.getElementById('addStudentBtn');
+        const studentNameInput = document.getElementById('studentName');
+        const studentList = document.getElementById('studentList');
+        const teamCountInput = document.getElementById('teamCount');
+        const makeTeamsBtn = document.getElementById('makeTeamsBtn');
+        const teamsContainer = document.getElementById('teams');
+        const studentRatingInput = document.getElementById('studentRating');
+        const slider = document.querySelector('.slider');
+        const settingsSection = document.getElementById('settings');
+        const themeOptions = document.querySelectorAll('.theme-option');
+        const defaultClassSelect = document.getElementById('defaultClass');
+        const saveSettingsBtn = document.getElementById('saveSettingsBtn');
+        const editStudentModal = document.getElementById('editStudentModal');
+        const editStudentNameInput = document.getElementById('editStudentName');
+        const editClassSelect = document.getElementById('editClassSelect');
+        const editStudentRatingInput = document.getElementById('editStudentRating');
+        const saveEditStudentBtn = document.getElementById('saveEditStudentBtn');
+        const editStudentTags = document.getElementById('editStudentTags');
+        const closeModal = document.querySelector('.close');
+        const classFilter = document.getElementById('classFilter'); // Added class filter
+        const balanceTeamsCheckbox = document.getElementById('balanceTeams');
+
+        let classes = [];
+        let students = [];
+        let currentEditStudentId = null;
+
+        // Theme settings
+        let currentTheme = localStorage.getItem('theme') || 'dark';
+        let defaultClass = localStorage.getItem('defaultClass') || '';
+
+        // Function to update the slider position based on the range input
+        function updateSliderPosition(inputElement, sliderElement) {
+            const value = inputElement.value;
+            const min = inputElement.min;
+            const max = inputElement.max;
+            const position = ((value - min) / (max - min)) * 100;
+            sliderElement.style.left = `calc(${position}% - 10px)`;
+        }
+
+        // Function to update the appearance of the page based on the selected theme
+        function applyTheme(theme) {
+            document.body.className = theme; // Apply theme as class to the body
+            localStorage.setItem('theme', theme);
+
+            // Update selected state for theme options
+            themeOptions.forEach(option => {
+                option.classList.toggle('selected', option.dataset.theme === theme);
+            });
+        }
+
+        // Function to load settings from local storage
+        function loadSettings() {
+            currentTheme = localStorage.getItem('theme') || 'dark';
+            defaultClass = localStorage.getItem('defaultClass') || '';
+
+            applyTheme(currentTheme);
+
+            // Set default class in select element
+            defaultClassSelect.value = defaultClass;
+        }
+
+        // Function to save settings to local storage
+        function saveSettings() {
+            localStorage.setItem('defaultClass', defaultClassSelect.value);
+            alert('Settings saved!');
+        }
+
+        // Function to set default class in the student form
+        function setDefaultClass() {
+            classSelect.value = localStorage.getItem('defaultClass') || '';
+        }
+
+        // Function to display a section and hide others
+        function showSection(targetId) {
+            dashboardSections.forEach(section => {
+                section.classList.add('hidden');
+            });
+            document.getElementById(targetId).classList.remove('hidden');
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.dataset.target === targetId) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        // Function to add a class
+        function addClass() {
+            const className = classNameInput.value.trim();
+            if (className !== '') {
+                const classId = generateId();
+                const newClass = { id: classId, name: className };
+                classes.push(newClass);
+                renderClassTable();
+                renderClassOptions();
+                classNameInput.value = '';
+            }
+        }
+
+        // Function to delete a class
+        function deleteClass(classId) {
+            classes = classes.filter(cls => cls.id !== classId);
+            renderClassTable();
+            renderClassOptions();
+        }
+
+        // Function to render the class table
+        function renderClassTable() {
+            classTableBody.innerHTML = '';
+            classes.forEach(cls => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${cls.name}</td>
+                    <td class="actions">
+                        <button class="delete" onclick="deleteClass('${cls.id}')"><i class="fas fa-trash"></i>
+                            Delete</button>
+                    </td>
+                `;
+                classTableBody.appendChild(row);            });
+                        }
+
+                        // Function to render class options in select elements
+                        function renderClassOptions() {
+                            let optionsHtml = '<option value="">Select Class</option>';
+                            classes.forEach(cls => {
+                                optionsHtml += `<option value="${cls.id}">${cls.name}</option>`;
+                            });
+                            classSelect.innerHTML = optionsHtml;
+                            defaultClassSelect.innerHTML = optionsHtml;
+                            editClassSelect.innerHTML = optionsHtml;
+                            classFilter.innerHTML = optionsHtml; // Also update the class filter
+                        }
+
+                        // Function to add a student
+                        function addStudent() {
+                            const studentName = studentNameInput.value.trim();
+                            const classId = classSelect.value;
+                            const rating = studentRatingInput.value;
+
+                            if (studentName !== '' && classId !== '') {
+                                const studentId = generateId();
+                                const newStudent = {
+                                    id: studentId,
+                                    name: studentName,
+                                    classId: classId,
+                                    rating: rating,
+                                    tags: []
+                                };
+                                students.push(newStudent);
+                                renderStudentList();
+                                studentNameInput.value = '';
+                                studentRatingInput.value = 50;
+                                updateSliderPosition(studentRatingInput, slider);
+                            }
+                        }
+
+                        // Function to edit a student
+                        function editStudent(studentId) {
+                            currentEditStudentId = studentId;
+                            const student = students.find(stu => stu.id === studentId);
+
+                            if (student) {
+                                editStudentNameInput.value = student.name;
+                                editClassSelect.value = student.classId;
+                                editStudentRatingInput.value = student.rating;
+                                updateSliderPosition(editStudentRatingInput, document.querySelector('#editStudentModal .slider'));
+
+                                // Check the appropriate checkboxes based on student tags
+                                const tagCheckboxes = editStudentTags.querySelectorAll('input[type="checkbox"]');
+                                tagCheckboxes.forEach(checkbox => {
+                                    checkbox.checked = student.tags.includes(checkbox.value);
+                                });
+
+                                editStudentModal.style.display = "block";
+                            }
+                        }
+
+                        // Function to save edited student data
+                        function saveEditStudent() {
+                            if (currentEditStudentId) {
+                                const student = students.find(stu => stu.id === currentEditStudentId);
+                                if (student) {
+                                    student.name = editStudentNameInput.value;
+                                    student.classId = editClassSelect.value;
+                                    student.rating = editStudentRatingInput.value;
+
+                                    // Get the selected tags
+                                    const tagCheckboxes = editStudentTags.querySelectorAll('input[type="checkbox"]:checked');
+                                    student.tags = Array.from(tagCheckboxes).map(checkbox => checkbox.value);
+
+                                    renderStudentList();
+                                    editStudentModal.style.display = "none";
+                                    currentEditStudentId = null;
+                                }
+                            }
+                        }
+
+                        // Function to delete a student
+                        function deleteStudent(studentId) {
+                            students = students.filter(stu => stu.id !== studentId);
+                            renderStudentList();
+                        }
+
+                        // Function to render the student list
+                        function renderStudentList() {
+                            studentList.innerHTML = '';
+                            students.forEach(stu => {
+                                const cls = classes.find(cls => cls.id === stu.classId);
+                                const className = cls ? cls.name : 'Unknown Class';
+
+                                const listItem = document.createElement('li');
+                                listItem.innerHTML = `
+                                    <span>${stu.name} (${className}) - Rating: ${stu.rating}</span>
+                                    <div class="student-tags">
+                                        ${stu.tags.map(tag => `<span class="student-tag ${tag}">${tag.replace('-', ' ')}</span>`).join('')}
+                                    </div>
+                                    <div class="actions">
+                                        <button class="edit" onclick="editStudent('${stu.id}')"><i class="fas fa-edit"></i>
+                                            Edit</button>
+                                        <button class="delete" onclick="deleteStudent('${stu.id}')"><i class="fas fa-trash"></i>
+                                            Delete</button>
+                                    </div>
+                                `;
+                                studentList.appendChild(listItem);
+                            });
+                        }
+
+                        // Function to increment team count
+                        function incrementTeamCount() {
+                            teamCountInput.value = parseInt(teamCountInput.value) + 1;
+                        }
+
+                        // Function to decrement team count
+                        function decrementTeamCount() {
+                            let currentValue = parseInt(teamCountInput.value);
+                            if (currentValue > 1) {
+                                teamCountInput.value = currentValue - 1;
+                            }
+                        }
+
+                        // Function to make teams
+                        function makeTeams() {
+                            const classId = classFilter.value;
+                            const teamCount = parseInt(teamCountInput.value);
+                            const balanceTeams = balanceTeamsCheckbox.checked;
+
+                            if (isNaN(teamCount) || teamCount <= 0) {
+                                alert('Please enter a valid number of teams.');
+                                return;
+                            }
+
+                            // Filter students by selected class
+                            const studentsForClass = students.filter(stu => stu.classId === classId);
+
+                            if (studentsForClass.length === 0) {
+                                alert('No students found for the selected class.');
+                                return;
+                            }
+
+                            let shuffledStudents = [...studentsForClass];
+
+                            if (balanceTeams) {
+                                shuffledStudents.sort((a, b) => b.rating - a.rating); // Sort by rating (descending)
+                            } else {
+                                shuffledStudents.sort(() => 0.5 - Math.random()); // Shuffle randomly
+                            }
+
+                            const teams = [];
+                            for (let i = 0; i < teamCount; i++) {
+                                teams.push({ name: `Team ${i + 1}`, members: [] });
+                            }
+
+                            for (let i = 0; i < shuffledStudents.length; i++) {
+                                teams[i % teamCount].members.push(shuffledStudents[i]);
+                            }
+
+                            // Render the teams
+                            renderTeams(teams);
+                        }
+
+                        // Function to render teams
+                        function renderTeams(teams) {
+                            teamsContainer.innerHTML = '';
+                            teams.forEach(team => {
+                                const teamDiv = document.createElement('div');
+                                teamDiv.classList.add('team');
+                                teamDiv.innerHTML = `
+                                    <h3>${team.name}</h3>
+                                    <ul>
+                                        ${team.members.map(member => `<li>${member.name} (Rating: ${member.rating})</li>`).join('')}
+                                    </ul>
+                                `;
+                                teamsContainer.appendChild(teamDiv);
+                            });
+                        }
+
+                        // Function to generate a unique ID
+                        function generateId() {
+                            return Math.random().toString(36).substring(2, 15);
+                        }
+
+                        // Event listeners
+                        addClassBtn.addEventListener('click', addClass);
+                        addStudentBtn.addEventListener('click', addStudent);
+                        makeTeamsBtn.addEventListener('click', makeTeams);
+
+                        // Navigation links event listeners
+                        navLinks.forEach(link => {
+                            link.addEventListener('click', function (e) {
+                                e.preventDefault();
+                                showSection(this.dataset.target);
+                            });
+                        });
+
+                        // Slider input event listener
+                        studentRatingInput.addEventListener('input', () => updateSliderPosition(studentRatingInput, slider));
+
+                        //Edit Slider input event listener
+                        editStudentRatingInput.addEventListener('input', () => updateSliderPosition(editStudentRatingInput, document.querySelector('#editStudentModal .slider')));
+
+                        // Theme option event listeners
+                        themeOptions.forEach(option => {
+                            option.addEventListener('click', function () {
+                                applyTheme(this.dataset.theme);
+                            });
+                        });
+
+                        // Save settings button event listener
+                        saveSettingsBtn.addEventListener('click', saveSettings);
+
+                        // Save edited student button event listener
+                        saveEditStudentBtn.addEventListener('click', saveEditStudent);
+
+                        // Close modal event listener
+                        closeModal.addEventListener('click', function () {
+                            editStudentModal.style.display = "none";
+                        });
+
+                        // Close modal if clicked outside the modal
+                        window.addEventListener('click', function (event) {
+                            if (event.target == editStudentModal) {
+                                editStudentModal.style.display = "none";
+                            }
+                        });
+
+                        // Initial setup
+                        loadSettings();
+                        renderClassTable();
+                        renderClassOptions();
+                        renderStudentList();
+                        updateSliderPosition(studentRatingInput, slider);
+                        setDefaultClass();
+
+                        // Show the 'classes' section by default
+                        showSection('classes');
+                    </script>
+                </body>
+
+                </html>
